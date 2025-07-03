@@ -54,3 +54,41 @@ $(document).ready(function () {
   });
 });
 
+// Create popup overlay
+const container = document.getElementById('popup');
+const content = document.getElementById('popup-content');
+const closer = document.getElementById('popup-closer');
+
+const overlay = new ol.Overlay({
+  element: container,
+  autoPan: {
+    animation: {
+      duration: 250
+    }
+  }
+});
+map.addOverlay(overlay);
+
+// Close button
+closer.onclick = function () {
+  overlay.setPosition(undefined);
+  closer.blur();
+  return false;
+};
+
+// Show popup on polygon click
+map.on('singleclick', function (evt) {
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+    return feat;
+  });
+
+  if (feature) {
+    const props = feature.getProperties();
+    const name = props.name || props.tentinh || 'Unnamed';
+    content.innerHTML = `<strong>${name}</strong>`;
+    overlay.setPosition(evt.coordinate);
+  } else {
+    overlay.setPosition(undefined);
+    closer.blur();
+  }
+});
