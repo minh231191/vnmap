@@ -10,3 +10,10 @@ const map = new ol.Map({
       zoom: 10
     })
   });
+
+const esriLayer = new ol.layer.Tile({
+source: new ol.source.XYZ({
+    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+})
+});
+map.addLayer(esriLayer);
